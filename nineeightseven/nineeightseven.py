@@ -542,4 +542,4 @@ app = rx.App(
         "style.css",
     ],
 )
-app.add_page(index, on_load=State.on_load)
+app.add_page(index, on_load=State.on_load, title="987")
