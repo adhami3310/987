@@ -2,7 +2,7 @@
 
 Just like 2048, but with fibonacci numbers!
 
-Deployed on https://987.staging.reflexcorp.run/
+Deployed on https://nineeightseven-cyan-star.staging.reflexcorp.run/
 
 ## Stack
 
