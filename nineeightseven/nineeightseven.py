@@ -256,7 +256,7 @@ class State(rx.State):
     @rx.var
     def board(self) -> list[list[tuple[int, int]]]:
         """Get the board."""
-        return [[cell for cell in row] for row in self._board.board]
+        return [list(row) for row in self._board.board]
 
     @rx.event
     def on_key(self, key):
