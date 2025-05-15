@@ -1,4 +1,4 @@
-reflex==0.6.8a1
+reflex>=0.7.11
 reflex-global-hotkey==1.1.1
 reflex-swipe==1.0.0
 reflex-motion @ git+https://github.com/Alek99/reflex-motion@main

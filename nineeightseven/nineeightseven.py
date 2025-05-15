@@ -431,6 +431,90 @@ def render_tile(value: int, key: int, i: int, j: int):
     )
 
 
+def color_mode_switcher():
+    """Color mode switcher."""
+    return rx.color_mode_cond(
+        rx.icon_button(
+            "sun",
+            variant="outline",
+            color_scheme="purple",
+            size="4",
+            on_click=rx.toggle_color_mode,
+        ),
+        rx.icon_button(
+            "moon",
+            variant="outline",
+            color_scheme="purple",
+            size="4",
+            on_click=rx.toggle_color_mode,
+        ),
+    )
+
+
+def reset_button():
+    """Reset button."""
+    return rx.icon_button(
+        "rotate_ccw",
+        variant="outline",
+        color_scheme="purple",
+        size="4",
+        on_click=State.on_reset,
+    )
+
+
+def built_with_reflex():
+    """Built with Reflex."""
+    return rx.link(
+        rx.hstack(
+            "Built with ",
+            svg_logo(),
+            align="center",
+            justify="center",
+        ),
+        href="https://reflex.dev",
+        target="_blank",
+        font_family="monospace",
+        margin_block_start="1em",
+        width="100%",
+    )
+
+
+def source_code():
+    """Source code link."""
+    return rx.link(
+        "Source code on GitHub",
+        href="https://github.com/adhami3310/987",
+        target="_blank",
+        font_family="monospace",
+        width="100%",
+        text_align="center",
+    )
+
+
+def board():
+    """Get the board."""
+    return swipeable(
+        animate_presence(
+            rx.foreach(
+                rx.Var.range(BOARD_SIZE**2),
+                lambda x: render_tile(
+                    State.board[x // BOARD_SIZE][x % BOARD_SIZE][0],
+                    State.board[x // BOARD_SIZE][x % BOARD_SIZE][1],
+                    x // BOARD_SIZE,
+                    x % BOARD_SIZE,
+                ),
+            )
+        ),
+        position="relative",
+        width=f"calc({BOARD_SIZE} * {SQUARE_SIZE} + {GAP_SIZE} * ({BOARD_SIZE} - 1))",
+        height=f"calc({BOARD_SIZE} * {SQUARE_SIZE} + {GAP_SIZE} * ({BOARD_SIZE} - 1))",
+        on_swiped_left=State.on_key("ArrowLeft"),
+        on_swiped_right=State.on_key("ArrowRight"),
+        on_swiped_up=State.on_key("ArrowUp"),
+        on_swiped_down=State.on_key("ArrowDown"),
+    )
+
+
 def index() -> rx.Component:
     """Index page."""
     return rx.fragment(
@@ -442,77 +526,16 @@ def index() -> rx.Component:
                             rx.heading("Score: ", State.score, size="8"),
                         ),
                         rx.hstack(
-                            rx.color_mode_cond(
-                                rx.icon_button(
-                                    "sun",
-                                    variant="outline",
-                                    color_scheme="purple",
-                                    size="4",
-                                    on_click=rx.toggle_color_mode,
-                                ),
-                                rx.icon_button(
-                                    "moon",
-                                    variant="outline",
-                                    color_scheme="purple",
-                                    size="4",
-                                    on_click=rx.toggle_color_mode,
-                                ),
-                            ),
-                            rx.icon_button(
-                                "rotate_ccw",
-                                variant="outline",
-                                color_scheme="purple",
-                                size="4",
-                                on_click=State.on_reset,
-                            ),
+                            color_mode_switcher(),
+                            reset_button(),
                         ),
                         width="100%",
                         align="center",
                         justify="between",
                     ),
-                    swipeable(
-                        animate_presence(
-                            rx.Var.create(
-                                rx.foreach(
-                                    rx.Var.range(BOARD_SIZE**2),
-                                    lambda x: render_tile(
-                                        State.board[x // BOARD_SIZE][x % BOARD_SIZE][0],
-                                        State.board[x // BOARD_SIZE][x % BOARD_SIZE][1],
-                                        x // BOARD_SIZE,
-                                        x % BOARD_SIZE,
-                                    ),
-                                )
-                            ),
-                        ),
-                        position="relative",
-                        width=f"calc({BOARD_SIZE} * {SQUARE_SIZE} + {GAP_SIZE} * ({BOARD_SIZE} - 1))",
-                        height=f"calc({BOARD_SIZE} * {SQUARE_SIZE} + {GAP_SIZE} * ({BOARD_SIZE} - 1))",
-                        on_swiped_left=State.on_key("ArrowLeft"),
-                        on_swiped_right=State.on_key("ArrowRight"),
-                        on_swiped_up=State.on_key("ArrowUp"),
-                        on_swiped_down=State.on_key("ArrowDown"),
-                    ),
-                    rx.link(
-                        rx.hstack(
-                            "Built with ",
-                            svg_logo(),
-                            align="center",
-                            justify="center",
-                        ),
-                        href="https://reflex.dev",
-                        target="_blank",
-                        font_family="monospace",
-                        margin_block_start="1em",
-                        width="100%",
-                    ),
-                    rx.link(
-                        "Source code on GitHub",
-                        href="https://github.com/adhami3310/987",
-                        target="_blank",
-                        font_family="monospace",
-                        width="100%",
-                        text_align="center",
-                    ),
+                    board(),
+                    built_with_reflex(),
+                    source_code(),
                 ),
                 width="100%",
                 min_height="100dvh",
